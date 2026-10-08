@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "test-data.schema.json",
+  "title": "Test Data Artifact",
+  "description": "ARCHITECTURE.md Section 7 / Section C (Dynamic Test-Data Architecture).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^TD-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "test-data" },
+    "producedBy": { "const": "test-data" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "testCaseId": { "type": "string", "pattern": "^TC-" },
+        "module": { "type": "string" },
+        "generationMethod": { "enum": ["synthetic", "api", "reference"] },
+        "seed": { "type": ["integer", "null"] },
+        "payload": { "type": "object" },
+        "setup": { "type": "array", "items": { "type": "string" } },
+        "teardown": { "type": "array", "items": { "type": "string" } },
+        "environmentTarget": { "const": "non-production" }
+      },
+      "required": ["testCaseId", "generationMethod", "payload", "teardown", "environmentTarget"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "automation.schema.json",
+  "title": "Automation Metadata Artifact",
+  "description": "ARCHITECTURE.md Section 8 (Automation Generation Agent). Dry-run mode produces metadata only (ARCHITECTURE.md Section 27 lists 'Automation Metadata', not generated code) unless automation already exists and is merely linked.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^AUTO-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "automation" },
+    "producedBy": { "const": "automation-generation" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "testCaseId": { "type": "string", "pattern": "^TC-" },
+        "specFile": { "type": ["string", "null"] },
+        "pageObjectsTouched": { "type": "array", "items": { "type": "string" } },
+        "automationStatus": { "enum": ["existing-linked", "generated", "pending-automation"] },
+        "generatedNewFiles": { "type": "boolean" }
+      },
+      "required": ["testCaseId", "automationStatus", "pageObjectsTouched", "generatedNewFiles"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

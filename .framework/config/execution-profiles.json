@@ -1,0 +1,7 @@
+{
+  "smoke": { "grep": "@smoke", "project": "chromium" },
+  "sanity": { "grep": "@sanity", "project": "chromium" },
+  "api": { "grep": "@api", "project": "chromium" },
+  "ui": { "grep": "@ui", "project": "chromium" },
+  "changed": { "grep": "@changed", "project": "chromium" }
+}

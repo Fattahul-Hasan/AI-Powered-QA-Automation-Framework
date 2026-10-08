@@ -1,0 +1,7 @@
+{
+  "_comment": "SYNTHETIC dry-run fixture, not a real GitLab MR. GitLab MCP is read-only and this Node harness cannot open a real MCP session anyway (see .framework/lib/gitlab-adapter.js) -- this fixture demonstrates the Regression Agent's real impact-mapping logic against a hypothetical, clearly-labeled change.",
+  "isSynthetic": true,
+  "mrIid": "SYNTHETIC-MR-1",
+  "title": "Hypothetical: refactor HomePage locator strategy",
+  "changedFiles": ["pages/HomePage.js"]
+}

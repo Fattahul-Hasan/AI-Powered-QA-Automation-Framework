@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "self-healing.schema.json",
+  "title": "Self-Healing Artifact",
+  "description": "ARCHITECTURE.md Section 11 / Section H, finalized Decision 1 (2026-08-25). assertionTouched MUST be false on every artifact this schema accepts -- self-healing may never touch assertions, expected outcomes, validation logic, or test intent, at any confidence.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^SH-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "self-healing" },
+    "producedBy": { "const": "self-healing" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "testId": { "type": "string", "pattern": "^TC-" },
+        "sourceFailureAnalysisId": {
+          "type": ["string", "null"],
+          "pattern": "^(FA-.*)?$",
+          "description": "PHASE 4, A6: back-reference to the failure-analysis artifact that triggered this healing proposal, preserving the original failure information."
+        },
+        "proposedDiff": { "type": "string" },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "filesTouched": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^pages/" }
+        },
+        "assertionTouched": { "const": false },
+        "changeScope": { "enum": ["locator-level", "low-risk-structural", null] },
+        "rerunResult": { "enum": ["passed", "failed", "not-run"] },
+        "decision": {
+          "enum": ["auto-applied-locally-pending-merge-review", "pending-approval", "rejected", "no-change-proposed"]
+        },
+        "dryRun": { "const": true },
+        "realFileWritePerformed": { "const": false },
+        "mrOpened": { "const": false },
+        "mergeApprovedByHuman": { "const": false }
+      },
+      "required": ["testId", "confidence", "filesTouched", "assertionTouched", "rerunResult", "decision", "dryRun", "realFileWritePerformed", "mrOpened", "mergeApprovedByHuman"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

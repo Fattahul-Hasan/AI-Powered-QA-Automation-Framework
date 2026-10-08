@@ -1,0 +1,6 @@
+{
+  "local": { "baseURL": null, "testEnvironment": "non-production" },
+  "qa": { "baseURL": null, "testEnvironment": "non-production" },
+  "staging": { "baseURL": null, "testEnvironment": "non-production" },
+  "ci": { "baseURL": null, "testEnvironment": "non-production" }
+}

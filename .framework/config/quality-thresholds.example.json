@@ -1,0 +1,5 @@
+{
+  "_comment": "Example only -- not a real organizational standard. Tune per project before use. passRate is a 0-1 ratio; coveragePercent/automationHealthPercent are 0-100 (matching reporting.js's own scale); criticalFailures/flakyCount are raw counts.",
+  "passRate": 0.9,
+  "flakyCount": 3
+}

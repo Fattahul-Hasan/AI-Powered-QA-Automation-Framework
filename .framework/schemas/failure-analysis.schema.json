@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "failure-analysis.schema.json",
+  "title": "Failure Analysis Artifact",
+  "description": "ARCHITECTURE.md Section 10 (Failure Analysis Agent).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^FA-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "failure-analysis" },
+    "producedBy": { "const": "failure-analysis" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "testId": { "type": "string", "pattern": "^TC-" },
+        "category": {
+          "enum": ["selector-drift", "timeout", "navigation-failure", "authentication-failure", "test-data-failure", "environment-failure", "application-defect", "assertion-failure", "infrastructure-failure", "flaky-test"]
+        },
+        "failureGroup": { "enum": ["test-failure", "environment-infrastructure", "unknown"] },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "suspectedRootCause": { "type": "string" },
+        "recommendedNextAgent": { "enum": ["self-healing", "human", "none"] },
+        "isSynthetic": { "type": "boolean" },
+        "filePath": { "type": ["string", "null"] },
+        "propertyGuess": { "type": ["string", "null"] },
+        "domSnapshotBefore": { "type": ["object", "null"] },
+        "domSnapshotAfter": { "type": ["object", "null"] }
+      },
+      "required": ["testId", "category", "confidence", "suspectedRootCause", "recommendedNextAgent", "isSynthetic"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

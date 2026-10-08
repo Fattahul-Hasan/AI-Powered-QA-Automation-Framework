@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "manifest.schema.json",
+  "title": "Traceability Manifest",
+  "description": "ARCHITECTURE.md Section A. Single source of truth for Requirement -> Test Case -> Automation -> Execution -> Report. Written only by the Orchestrator.",
+  "type": "object",
+  "properties": {
+    "runId": { "type": "string", "minLength": 1 },
+    "createdAt": { "type": "string" },
+    "updatedAt": { "type": "string" },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "testCaseIds": { "type": "array", "items": { "type": "string" } },
+          "automation": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "lastExecution": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "runId": { "type": "string" },
+                "status": { "enum": ["passed", "failed", "skipped", "not-automated"] },
+                "failureAnalysisId": { "type": "string", "description": "PHASE 4, A11: optional link to the failure-analysis artifact for this test case, when one exists." },
+                "selfHealingId": { "type": "string", "description": "PHASE 4, A11: optional link to the self-healing artifact for this test case, when one exists." }
+              },
+              "required": ["runId", "status"]
+            }
+          },
+          "reportRef": { "type": "string" }
+        },
+        "required": ["testCaseIds"]
+      }
+    }
+  },
+  "required": ["runId", "requirements"],
+  "additionalProperties": false
+}

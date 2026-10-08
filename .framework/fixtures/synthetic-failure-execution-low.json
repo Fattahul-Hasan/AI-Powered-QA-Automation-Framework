@@ -1,0 +1,14 @@
+{
+  "_comment": "SYNTHETIC dry-run fixture, not a real test failure. Demonstrates the LOW-confidence tier of the self-healing decision model: the element's role matches but the accessible name changed so substantially that no confident single replacement candidate exists -- this must produce NO diff at all, not a guess.",
+  "isSynthetic": true,
+  "testCaseId": "TC-DEMO-1-04",
+  "scenarioLabel": "Hypothetical: the docs search entry point was replaced entirely, from a \"Search\" button to a \"Find topics\" button, as part of an unrelated redesign.",
+  "errorMessage": "TimeoutError: locator.click: Target closed\nwaiting for getByRole('button', { name: 'Search' })",
+  "stackTrace": "at DocsSearchPage.openSearch (pages/modules/DocsSearchPage.js:12:24)",
+  "filePath": "pages/modules/DocsSearchPage.js",
+  "propertyGuess": "searchButton",
+  "domSnapshotBefore": { "role": "button", "accessibleName": "Search" },
+  "domSnapshotAfter": { "role": "button", "accessibleName": "Find topics" },
+  "consoleLogs": [],
+  "networkInfo": null
+}

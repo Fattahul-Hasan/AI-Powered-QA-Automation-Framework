@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "test-case.schema.json",
+  "title": "Test Case Artifact",
+  "description": "ARCHITECTURE.md Section 6 (Test Design Agent).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^TC-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "test-design" },
+    "producedBy": { "const": "test-design" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "requirementId": { "type": "string", "pattern": "^REQ-" },
+        "module": { "type": "string" },
+        "feature": { "type": "string" },
+        "scenario": { "type": "string", "minLength": 1 },
+        "testType": {
+          "enum": ["functional", "positive", "negative", "boundary", "validation", "permission", "role-based", "business-rule", "error-handling", "data-integrity", "regression-candidate"]
+        },
+        "priority": { "enum": ["P1", "P2", "P3", "P4"] },
+        "severity": { "enum": ["critical", "high", "medium", "low"] },
+        "risk": { "enum": ["high", "medium", "low"] },
+        "role": { "type": "string" },
+        "preconditions": { "type": "array", "items": { "type": "string" } },
+        "dataNeeds": { "type": "array", "items": { "type": "string" } },
+        "steps": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "expectedResult": { "type": "string", "minLength": 1 },
+        "pageObjectsNeeded": { "type": "array", "items": { "type": "string" } },
+        "automationCandidate": { "type": "boolean" },
+        "regressionCandidate": { "type": "boolean" },
+        "humanReviewRequired": { "type": "boolean" },
+        "highRiskCategory": {
+          "type": ["string", "null"],
+          "enum": ["Payments", "PII / Sensitive Data", "User Account Deletion", "Financial Transactions", "Authentication / Authorization", null]
+        },
+        "duplicateOf": { "type": ["string", "null"] }
+      },
+      "required": ["requirementId", "scenario", "testType", "priority", "severity", "risk", "steps", "expectedResult", "automationCandidate", "regressionCandidate", "humanReviewRequired"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

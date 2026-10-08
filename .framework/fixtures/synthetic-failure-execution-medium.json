@@ -1,0 +1,14 @@
+{
+  "_comment": "SYNTHETIC dry-run fixture, not a real test failure. Feeds the Failure Analysis Agent a hypothetical selector-drift scenario so its classification logic can be exercised end-to-end without a real application defect existing.",
+  "isSynthetic": true,
+  "testCaseId": "TC-DEMO-1-02",
+  "scenarioLabel": "Hypothetical: the docs search box's accessible name changed from \"Search\" to \"Search docs\" between releases.",
+  "errorMessage": "TimeoutError: locator.click: Target closed\nwaiting for getByRole('button', { name: 'Search' })",
+  "stackTrace": "at DocsSearchPage.openSearch (pages/modules/DocsSearchPage.js:12:24)",
+  "filePath": "pages/modules/DocsSearchPage.js",
+  "propertyGuess": "searchButton",
+  "domSnapshotBefore": { "role": "button", "accessibleName": "Search" },
+  "domSnapshotAfter": { "role": "button", "accessibleName": "Search docs" },
+  "consoleLogs": [],
+  "networkInfo": null
+}

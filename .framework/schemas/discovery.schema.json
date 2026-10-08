@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "discovery.schema.json",
+  "title": "Product Discovery Artifact",
+  "description": "ARCHITECTURE.md Section 5 (Product Discovery Agent) / Section E (Playwright MCP model).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^DISC-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "discovery" },
+    "producedBy": { "const": "product-discovery" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "role": { "type": "string" },
+        "title": { "type": "string" },
+        "accessibilityTree": { "type": "array" },
+        "keyLocators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "role": { "type": "string" },
+              "accessibleName": { "type": "string" }
+            },
+            "required": ["role", "accessibleName"]
+          }
+        },
+        "screenshotRef": { "type": ["string", "null"] },
+        "lastSeen": { "type": "string" },
+        "diffFromPrevious": { "type": ["object", "null"] },
+        "environment": { "enum": ["public-demo", "non-production-test", "unknown"] }
+      },
+      "required": ["url", "keyLocators", "lastSeen", "environment"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

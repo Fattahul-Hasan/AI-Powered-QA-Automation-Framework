@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "execution.schema.json",
+  "title": "Execution Result Artifact",
+  "description": "ARCHITECTURE.md Section 9 (Execution Agent) / Section F (Playwright CLI Execution Model).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^EXEC-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "execution" },
+    "producedBy": { "const": "execution" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "testCaseId": { "type": "string", "pattern": "^TC-" },
+        "specFile": { "type": ["string", "null"] },
+        "result": { "enum": ["passed", "failed", "skipped", "not-automated"] },
+        "durationMs": { "type": ["number", "null"] },
+        "browserProject": { "type": ["string", "null"] },
+        "errorMessage": { "type": ["string", "null"] },
+        "stackTrace": { "type": ["string", "null"] },
+        "source": { "enum": ["real-playwright-run", "synthetic-fixture"] },
+        "retryCount": { "type": "integer", "minimum": 0 },
+        "firstAttemptResult": {
+          "type": ["string", "null"],
+          "enum": ["passed", "failed", null],
+          "description": "PHASE 5, B4: the outcome of attempt 1, kept distinct from the final result so a retry-then-pass is never silently reported as a stable first-try pass."
+        },
+        "finalResult": {
+          "type": ["string", "null"],
+          "enum": ["passed", "failed", null]
+        },
+        "attachments": {
+          "type": "array",
+          "description": "PHASE 5, B12: real trace/screenshot/video paths Playwright actually captured, when available.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "path": { "type": ["string", "null"] }
+            },
+            "required": ["name"]
+          }
+        }
+      },
+      "required": ["testCaseId", "result", "source", "retryCount"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

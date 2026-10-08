@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "requirement.schema.json",
+  "title": "Requirement Artifact",
+  "description": "ARCHITECTURE.md Section 4 (Requirement Analysis Agent) / Section N (data contract).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^REQ-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "requirements" },
+    "producedBy": { "const": "requirement-analysis" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "actors": { "type": "array", "items": { "type": "string" } },
+        "module": { "type": ["string", "null"] },
+        "feature": { "type": ["string", "null"] },
+        "workflows": { "type": "array", "items": { "type": "string" } },
+        "businessRules": { "type": "array", "items": { "type": "string" } },
+        "acceptanceCriteria": { "type": "array", "items": { "type": "string" }, "minItems": 0 },
+        "dependencies": { "type": "array", "items": { "type": "string" } },
+        "validations": { "type": "array", "items": { "type": "string" } },
+        "risks": { "type": "array", "items": { "type": "string" } },
+        "sourceRef": { "type": "string" },
+        "sourceType": {
+          "enum": ["pdf", "doc", "docx", "xls", "xlsx", "csv", "markdown", "txt", "html", "plain-text", "user-story", "gitlab-issue", "gitlab-mr", "gitlab-repo-doc", "synthetic"]
+        },
+        "ambiguities": { "type": "array", "items": { "type": "string" } },
+        "missingInformation": { "type": "array", "items": { "type": "string" } },
+        "highRiskCategory": {
+          "type": ["string", "null"],
+          "enum": ["Payments", "PII / Sensitive Data", "User Account Deletion", "Financial Transactions", "Authentication / Authorization", null]
+        }
+      },
+      "required": ["title", "acceptanceCriteria", "sourceRef", "sourceType", "ambiguities", "missingInformation"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

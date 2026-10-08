@@ -1,0 +1,14 @@
+{
+  "_comment": "SYNTHETIC dry-run fixture, not a real test failure. Demonstrates the HIGH-confidence tier of the self-healing decision model: a trivial, unambiguous locator drift (trailing-whitespace normalization) with the same role and a near-identical accessible name.",
+  "isSynthetic": true,
+  "testCaseId": "TC-DEMO-1-03",
+  "scenarioLabel": "Hypothetical: the docs search box's accessible name gained trailing whitespace (\"Search\" -> \"Search \") after a template change.",
+  "errorMessage": "TimeoutError: locator.click: Target closed\nwaiting for getByRole('button', { name: 'Search' })",
+  "stackTrace": "at DocsSearchPage.openSearch (pages/modules/DocsSearchPage.js:12:24)",
+  "filePath": "pages/modules/DocsSearchPage.js",
+  "propertyGuess": "searchButton",
+  "domSnapshotBefore": { "role": "button", "accessibleName": "Search" },
+  "domSnapshotAfter": { "role": "button", "accessibleName": "Search " },
+  "consoleLogs": [],
+  "networkInfo": null
+}

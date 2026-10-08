@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "report.schema.json",
+  "title": "Report Summary Artifact",
+  "description": "ARCHITECTURE.md Section 14 / Section K (Reporting Architecture).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^RPT-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "reporting" },
+    "producedBy": { "const": "reporting" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "generatedAt": { "type": "string" },
+        "totals": {
+          "type": "object",
+          "properties": {
+            "requirements": { "type": "integer" },
+            "testCases": { "type": "integer" },
+            "automated": { "type": "integer" },
+            "executed": { "type": "integer" },
+            "passed": { "type": "integer" },
+            "failed": { "type": "integer" },
+            "skipped": { "type": "integer" }
+          },
+          "required": ["requirements", "testCases", "automated", "executed", "passed", "failed", "skipped"]
+        },
+        "moduleBreakdown": { "type": "object" },
+        "testTypeBreakdown": { "type": "object" },
+        "requirementCoveragePercent": { "type": "number" },
+        "automationCoveragePercent": { "type": "number" },
+        "gapAnalysisRef": { "type": "string" },
+        "regressionRef": { "type": ["string", "null"] },
+        "selfHealingActivity": { "type": "array" },
+        "flakyTests": { "type": "array" },
+        "staleTests": { "type": "array" },
+        "diagnostics": {
+          "type": "array",
+          "description": "PHASE 5, B12: per-failed-test diagnostics -- category, retry info, real attachment paths, non-secret environment snapshot.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "testCaseId": { "type": "string" },
+              "specFile": { "type": ["string", "null"] },
+              "category": { "type": ["string", "null"] },
+              "failureGroup": { "type": ["string", "null"] },
+              "retryInfo": { "type": "object" },
+              "attachments": { "type": "array" },
+              "environment": { "type": "object" }
+            },
+            "required": ["testCaseId"]
+          }
+        },
+        "auditLogRef": { "type": "string" }
+      },
+      "required": ["generatedAt", "totals", "gapAnalysisRef", "auditLogRef"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "requirement-change.schema.json",
+  "title": "Requirement Change Detection Artifact",
+  "description": "PHASE 4, A1 (Requirement Change Detection). Structured diff between two versions of a requirement source.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^REQCHG-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "requirement-change" },
+    "producedBy": { "const": "requirement-diff" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "added": { "type": "array", "items": { "type": "string" } },
+        "removed": { "type": "array", "items": { "type": "string" } },
+        "modified": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "changedFields": { "type": "array", "items": { "type": "string" } }
+            },
+            "required": ["id", "changedFields"]
+          }
+        },
+        "unchanged": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["added", "removed", "modified", "unchanged"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

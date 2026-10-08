@@ -1,0 +1,65 @@
+# CI/CD foundation (ARCHITECTURE.md Section P, Decision 4).
+#
+# Only deterministic, non-generative steps run here: installing dependencies, the framework's
+# own validation tests, the preserved smoke test, and the dry-run pipeline harness (plain
+# Node.js logic operating on synthetic fixtures -- not an LLM call). No generative/diagnostic
+# agent (Requirement Analysis, Test Design, Self-Healing, etc. acting as an LLM) runs
+# unattended here. GitLab write operations remain disabled at the code level regardless of what
+# runs in this pipeline (.framework/lib/gitlab-adapter.js).
+
+stages:
+  - install
+  - validate
+  - test
+  - dry-run
+  - publish
+
+default:
+  image: mcr.microsoft.com/playwright:v1.62.1-jammy
+  cache:
+    paths:
+      - node_modules/
+
+install:
+  stage: install
+  script:
+    - npm ci
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+framework-validate:
+  stage: validate
+  script:
+    - npx playwright test --project=framework
+  needs: [install]
+
+smoke-test:
+  stage: test
+  script:
+    - npx playwright test --project=chromium --project=firefox --project=webkit
+  needs: [install]
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+      - test-results/
+    expire_in: 7 days
+
+dry-run-pipeline:
+  stage: dry-run
+  script:
+    - npm run framework:dry-run
+  needs: [install, framework-validate]
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    expire_in: 7 days
+
+publish-report:
+  stage: publish
+  script:
+    - echo "Reports available as job artifacts (playwright-report/, reports/). Publishing to a GitLab MR comment requires GitLab MCP write access, which remains disabled until Phase 9 (ARCHITECTURE.md Section G)."
+  needs: [smoke-test, dry-run-pipeline]

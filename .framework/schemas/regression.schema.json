@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "regression.schema.json",
+  "title": "Regression Selection Artifact",
+  "description": "ARCHITECTURE.md Section 13 / Section J (dual trigger: standard tail + independent GitLab MR trigger, finalized 2026-08-25).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^REG-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "regression" },
+    "producedBy": { "const": "regression" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "trigger": { "enum": ["standard-tail", "independent-mr-trigger"] },
+        "changedFiles": { "type": "array", "items": { "type": "string" } },
+        "impactedTestIds": { "type": "array", "items": { "type": "string" } },
+        "smokeBaselineIds": { "type": "array", "items": { "type": "string" } },
+        "selectedForExecution": { "type": "array", "items": { "type": "string" } },
+        "selectionReasons": {
+          "type": "object",
+          "description": "PHASE 4, A3: testCaseId -> array of reason strings explaining why it was selected.",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+        },
+        "isSyntheticTrigger": { "type": "boolean" }
+      },
+      "required": ["trigger", "changedFiles", "impactedTestIds", "smokeBaselineIds", "selectedForExecution"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}

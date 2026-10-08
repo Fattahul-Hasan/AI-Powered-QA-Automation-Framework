@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "impact-analysis.schema.json",
+  "title": "Requirement Impact Analysis Artifact",
+  "description": "PHASE 4, A2 (Requirement Impact Analysis). Distinct from regression.schema.json -- this is requirement-change driven, regression is file-change driven.",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^IMPACT-" },
+    "runId": { "type": "string" },
+    "phase": { "const": "impact-analysis" },
+    "producedBy": { "const": "impact-analysis" },
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["ok", "partial", "failed"] },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "properties": {
+        "affectedRequirementIds": { "type": "array", "items": { "type": "string" } },
+        "affectedTestCaseIds": { "type": "array", "items": { "type": "string" } },
+        "affectedAutomationFiles": { "type": "array", "items": { "type": "string" } },
+        "regressionScopeTestCaseIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["affectedRequirementIds", "affectedTestCaseIds", "affectedAutomationFiles", "regressionScopeTestCaseIds"],
+      "additionalProperties": true
+    }
+  },
+  "required": ["id", "runId", "phase", "producedBy", "schemaVersion", "status", "data"],
+  "additionalProperties": false
+}
